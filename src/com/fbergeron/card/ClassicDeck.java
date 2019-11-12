@@ -1,0 +1,57 @@
+/*
+ * Copyright (C) 2002-2011  Frédéric Bergeron (fbergeron@users.sourceforge.net)
+ *                          and other contributors
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+package com.fbergeron.card;
+
+import java.awt.image.ImageObserver;
+
+/**
+ * A deck of cards.
+ *
+ * @author Frederic Bergeron
+ * @author <A HREF="http://javasol.sourceforge.net">http://javasol.sourceforge.net</A>
+ * @version Version 1.0
+ */
+public class ClassicDeck extends Deck {
+    protected ImageObserver imgObserver;
+
+    /**
+     * Creates a stack of 52 cards.  No jokers yet!
+     */
+    public ClassicDeck() {
+
+    }
+
+    public ClassicDeck(ImageObserver imgObserver) {
+        this.imgObserver = imgObserver;
+        buildCards();
+    }
+
+    protected void buildCards() {
+        for (int suit = 0; suit < Suit.suits.length; suit++) {
+            for (int value = 0; value < Value.values.length; value++) {
+                ClassicCard c = new ClassicCard(Value.values[value], Suit.suits[suit]);
+                if (imgObserver != null)
+                    c.setImageObserver(imgObserver);
+                push(c);
+
+            }
+        }
+    }
+}
