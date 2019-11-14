@@ -101,7 +101,7 @@ public class GameState {
     }
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof GameState))
+        if (!(obj instanceof GameState))
             return (false);
 
         GameState gs = (GameState) obj;

@@ -55,25 +55,11 @@ public abstract class Card {
     }
 
     /**
-     * Flips the card.
-     */
-    public void flip() {
-        if (isFaceDown())
-            turnFaceUp();
-        else
-            turnFaceDown();
-    }
-
-    /**
      * @param x X-coord of the new location.
      * @param y Y-coord of the new location.
      */
     public void setLocation(int x, int y) {
         location = new Point(x, y);
-    }
-
-    public void setSize(int width, int height) {
-        size = new Dimension(width, height);
     }
 
     public boolean contains(Point p) {

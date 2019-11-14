@@ -35,34 +35,35 @@ import java.util.Hashtable;
  */
 public class ClassicCard extends Card {
 
-    public static final String STRING_HIDDEN = "X";
+    private static final String STRING_HIDDEN = "X";
 
-    public static final int BORDER_ARC = 20;
-    public static final Color CARD_COLOR = Color.blue;
-    static private Hashtable images = new Hashtable();
+    private static final int BORDER_ARC = 20;
+    private static final Color CARD_COLOR = Color.blue;
+    static private Hashtable<String, Image> images = new Hashtable<>();
     static private MediaTracker tracker = new MediaTracker(new Button());
 
     //Preloading of the card images.
     static {
         for (int i = 0; i < Suit.suits.length; i++) {
             for (int j = 0; j < Value.values.length; j++) {
-                StringBuffer imgFilename = new StringBuffer(Suit.suits[i].toString());
+                StringBuilder imgFilename = new StringBuilder(Suit.suits[i].toString());
                 imgFilename.append("/").append(Value.values[j].toString());
                 String imgName = imgFilename.toString();
                 imgFilename.append(".png");
                 Image img = Util.getImageResourceFile(imgFilename.toString(), ClassicCard.class);
                 tracker.addImage(img, 0);
-                images.put(imgName, img);
+                if (img != null)
+                    images.put(imgName, img);
             }
         }
         String imgName = "Legal";
         Image img = Util.getImageResourceFile(imgName + ".png", ClassicCard.class);
         tracker.addImage(img, 0);
-        images.put(imgName, img);
+        if (img != null)
+            images.put(imgName, img);
         try {
             tracker.waitForID(0);
-        } catch (InterruptedException e) {
-            // Ignore the interruption.
+        } catch (InterruptedException ignored) {
         }
     }
 
@@ -74,10 +75,9 @@ public class ClassicCard extends Card {
     private Image img;
 
     /**
-     * Creates a card.
+     * Creates a card from other one.
      *
-     * @param value The value of the card.
-     * @param suit  The suit of the card.
+     * @param card Card to be copied.
      */
     public ClassicCard(ClassicCard card) {
         super();
@@ -86,7 +86,8 @@ public class ClassicCard extends Card {
         this.imgObserver = card.imgObserver;
         this.suit = card.suit;
         this.value = card.value;
-//      this.legal=true;
+        this.legal = card.legal;
+
         this.setLocation(card.getLocation());
         this.setSize(card.getSize());
         if (card.isFaceDown())
@@ -95,26 +96,29 @@ public class ClassicCard extends Card {
             this.turnFaceUp();
     }
 
-    public ClassicCard(Value value, Suit suit) {
+    ClassicCard(Value value, Suit suit) {
         super();
         this.suit = suit;
         this.value = value;
-        StringBuffer tmpImgName = new StringBuffer(suit.toString());
-        tmpImgName.append("/").append(value.toString());
-        this.imgName = tmpImgName.toString();
+        this.imgName = suit.toString() + "/" + value.toString();
         this.legal = false;
         turnFaceDown();
     }
 
     public boolean equals(Object obj) {
-        return
-                isFaceDown() == ((ClassicCard) obj).isFaceDown() &&
-                        suit == ((ClassicCard) obj).suit &&
-                        value == ((ClassicCard) obj).value;
+        if (!(obj instanceof ClassicCard))
+            return false;
+        if (obj == this)
+            return true;
+
+        ClassicCard classicCard = (ClassicCard) obj;
+        return isFaceDown() == classicCard.isFaceDown() &&
+                suit == classicCard.suit &&
+                value == classicCard.value;
     }
 
     public String toString() {
-        StringBuffer strBufTemp = new StringBuffer();
+        StringBuilder strBufTemp = new StringBuilder();
         if (isFaceDown())
             strBufTemp.append(STRING_HIDDEN);
         strBufTemp.append(value.toString());
@@ -140,12 +144,12 @@ public class ClassicCard extends Card {
             g.setColor(Color.white);
             g.fillRect(location.x, location.y, getSize().width - 1, getSize().height - 1);
 
-            Image img = (Image) images.get(imgName);
+            Image img = images.get(imgName);
             if (img != null && imgObserver != null)
                 g.drawImage(img, location.x + 3, location.y + 3, imgObserver);
             if (hint) {
                 if (this.legal) {
-                    img = (Image) images.get("Legal");
+                    img = images.get("Legal");
                     if (img != null && imgObserver != null)
                         g.drawImage(img, location.x + 3, location.y + 3, imgObserver);
                 }
@@ -176,22 +180,18 @@ public class ClassicCard extends Card {
     }
 
     /**
-     * @return Value of the card.  May be from 1 to 13.
+     * @return Value of the card. May be from 1 to 13.
      */
     public Value getValue() {
         return value;
     }
 
-    public boolean isLegal() {
-        return legal;
+    void setImageObserver(ImageObserver imgObserver) {
+        this.imgObserver = imgObserver;
     }
 
     public void setLegal(boolean legal) {
         this.legal = legal;
-    }
-
-    public void setImageObserver(ImageObserver imgObserver) {
-        this.imgObserver = imgObserver;
     }
 
 }
