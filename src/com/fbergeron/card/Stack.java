@@ -103,17 +103,6 @@ public class Stack {
     }
 
     /**
-     * Pushes a stack of cards on the stack.
-     *
-     * @param sc Stack of cards to be pushed.
-     */
-    public void push(Stack sc) {
-        for (; !sc.isEmpty(); ) {
-            push(sc.pop());
-        }
-    }
-
-    /**
      * Pops a card from the stack.
      *
      * @return The card on top of the stack.
@@ -136,23 +125,6 @@ public class Stack {
                 break;
         }
         return c;
-    }
-
-    /**
-     * Pops several cards from the stack into a returned stack.
-     *
-     * @param n Number of cards to be popped.
-     * @return A stack containing the cards popped.
-     */
-    public Stack pop(int n) {
-        Stack s = new Stack();
-
-        for (int i = n; i > 0 && !isEmpty(); i--)
-            s.push(pop());
-        s.setSpreadingDelta(spreadingDelta);
-        s.setSpreadingDirection(spreadDirection);
-
-        return s;
     }
 
     /**

@@ -74,7 +74,6 @@ public class ClassicCardTest {
         String string = "XJCX";
 
         String result = classicCard.toString();
-
         assertEquals(string, result);
     }
 

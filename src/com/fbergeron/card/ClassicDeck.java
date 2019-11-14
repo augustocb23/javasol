@@ -29,13 +29,12 @@ import java.awt.image.ImageObserver;
  * @version Version 1.0
  */
 public class ClassicDeck extends Deck {
-    protected ImageObserver imgObserver;
+    private ImageObserver imgObserver;
 
     /**
      * Creates a stack of 52 cards.  No jokers yet!
      */
     public ClassicDeck() {
-
     }
 
     public ClassicDeck(ImageObserver imgObserver) {
@@ -43,14 +42,13 @@ public class ClassicDeck extends Deck {
         buildCards();
     }
 
-    protected void buildCards() {
+    private void buildCards() {
         for (int suit = 0; suit < Suit.suits.length; suit++) {
             for (int value = 0; value < Value.values.length; value++) {
                 ClassicCard c = new ClassicCard(Value.values[value], Suit.suits[suit]);
                 if (imgObserver != null)
                     c.setImageObserver(imgObserver);
                 push(c);
-
             }
         }
     }

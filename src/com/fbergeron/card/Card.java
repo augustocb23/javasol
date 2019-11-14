@@ -58,13 +58,13 @@ public abstract class Card {
      * @param x X-coord of the new location.
      * @param y Y-coord of the new location.
      */
-    public void setLocation(int x, int y) {
+    void setLocation(int x, int y) {
         location = new Point(x, y);
     }
 
     public boolean contains(Point p) {
         Rectangle rect = new Rectangle(location.x, location.y, size.width, size.height);
-        return (rect.contains(p));
+        return rect.contains(p);
     }
 
     /**
@@ -74,19 +74,19 @@ public abstract class Card {
         return location;
     }
 
+    Dimension getSize() {
+        return size;
+    }
+
+    void setSize(Dimension dim) {
+        size = new Dimension(dim.width, dim.height);
+    }
+
     /**
      * @param p Point corresponding to the new location.
      */
-    public void setLocation(Point p) {
+    void setLocation(Point p) {
         location = new Point(p.x, p.y);
-    }
-
-    public Dimension getSize() {
-        return (size);
-    }
-
-    public void setSize(Dimension dim) {
-        size = new Dimension(dim.width, dim.height);
     }
 
     /**
