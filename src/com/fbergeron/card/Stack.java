@@ -32,12 +32,12 @@ import java.util.Vector;
  */
 public class Stack {
 
-    public static final int SPREAD_NONE = 0;
-    public static final int SPREAD_NORTH = 1;
-    public static final int SPREAD_EAST = 2;
     public static final int SPREAD_SOUTH = 3;
-    public static final int SPREAD_WEST = 4;
-    private Vector cards;
+    private static final int SPREAD_NONE = 0;
+    private static final int SPREAD_NORTH = 1;
+    private static final int SPREAD_EAST = 2;
+    private static final int SPREAD_WEST = 4;
+    private Vector<Card> cards;
     private Point location;
     private Point nextCardLocation;
     private int spreadDirection;
@@ -47,13 +47,13 @@ public class Stack {
      * Creates an empty stack of cards.
      */
     public Stack() {
-        cards = new Vector();
+        cards = new Vector<>();
         setLocation(0, 0);
     }
 
     public int firstFaceUp() {
         for (int i = 0; i < cards.size(); i++) {
-            ClassicCard c = ((ClassicCard) cards.get(i));
+            ClassicCard c = (ClassicCard) cards.get(i);
             if (!c.isFaceDown())
                 return i;
         }
@@ -67,7 +67,7 @@ public class Stack {
         if (cards.size() == 0)
             return null;
         else
-            return (Card) (cards.elementAt(cards.size() - 1));
+            return cards.elementAt(cards.size() - 1);
     }
 
     /**
@@ -75,7 +75,7 @@ public class Stack {
      * @return the card at the specified index.
      */
     public Card elementAt(int index) {
-        return (Card) (cards.elementAt(index));
+        return cards.elementAt(index);
     }
 
     /**
@@ -158,18 +158,9 @@ public class Stack {
     }
 
     /**
-     * @param c Card to check.
+     * @param p Point to check.
      * @return <CODE>true</CODE> if the stack contains
-     * the card.  <CODE>false</CODE> otherwise.
-     */
-    public boolean contains(Card c) {
-        return cards.contains(c);
-    }
-
-    /**
-     * @param c Card to check.
-     * @return <CODE>true</CODE> if the stack contains
-     * the card.  <CODE>false</CODE> otherwise.
+     * the point.  <CODE>false</CODE> otherwise.
      */
     public boolean contains(Point p) {
         Rectangle rect = null;
@@ -179,6 +170,7 @@ public class Stack {
                 break;
             case SPREAD_NORTH:
                 int height = Card.DEFAULT_HEIGHT + (cards.size() - 1) * spreadingDelta;
+                //noinspection SuspiciousNameCombination
                 rect = new Rectangle(location.x - height, location.y, height, Card.DEFAULT_WIDTH);
                 break;
             case SPREAD_EAST:
@@ -194,18 +186,7 @@ public class Stack {
                 rect = new Rectangle(location.x - width, location.y, width, Card.DEFAULT_HEIGHT);
                 break;
         }
-        return (rect.contains(p));
-    }
-
-    /**
-     * Should be overridden by subclasses of stack.
-     * For a normal stack, it always return <CODE>true</CODE>.
-     *
-     * @return <CODE>true</CODE>, if it's ok to push a card on the stack.
-     * <CODE>false</CODE> otherwise.
-     */
-    public boolean isValid(Card c) {
-        return (true);
+        return rect != null && rect.contains(p);
     }
 
     /**
@@ -216,7 +197,7 @@ public class Stack {
      * <CODE>false</CODE> otherwise.
      */
     public boolean isValid(Stack c) {
-        return (true);
+        return true;
     }
 
     public void paint(Graphics g, boolean hint) {
@@ -227,8 +208,8 @@ public class Stack {
             g.setColor(Color.black);
             g.drawRect(loc.x, loc.y, Card.DEFAULT_WIDTH, Card.DEFAULT_HEIGHT);
         } else
-            for (Enumeration e = cards.elements(); e.hasMoreElements(); ) {
-                Card c = (Card) (e.nextElement());
+            for (Enumeration<Card> e = cards.elements(); e.hasMoreElements(); ) {
+                Card c = e.nextElement();
                 c.paint(g, hint);
             }
     }
@@ -241,17 +222,17 @@ public class Stack {
         boolean cardFound = false;
         Card c = null;
         for (int i = cards.size() - 1; !cardFound && i >= 0; i--) {
-            c = (Card) (cards.elementAt(i));
+            c = cards.elementAt(i);
             cardFound = c.contains(p);
         }
-        return (c);
+        return c;
     }
 
     /**
      * Reverses the cards contained in the stack.
      */
     public void reverse() {
-        Vector v = new Vector();
+        Vector<Card> v = new Vector<>();
 
         for (; !isEmpty(); )
             v.addElement(pop());
@@ -268,8 +249,8 @@ public class Stack {
     public void setLocation(int x, int y) {
         location = new Point(x, y);
         if (cards != null) {
-            for (Enumeration e = cards.elements(); e.hasMoreElements(); ) {
-                Card c = (Card) (e.nextElement());
+            for (Enumeration<Card> e = cards.elements(); e.hasMoreElements(); ) {
+                Card c = e.nextElement();
                 c.setLocation(x, y);
                 switch (spreadDirection) {
                     case SPREAD_NORTH:
@@ -298,7 +279,7 @@ public class Stack {
         nextCardLocation = new Point(x, y);
     }
 
-    public Vector getCards() {
+    public Vector<Card> getCards() {
         return cards;
     }
 
@@ -309,20 +290,12 @@ public class Stack {
         return location;
     }
 
-    private Point getNextCardLocation() {
-        return nextCardLocation;
-    }
-
-    private void setNextCardLocation(Point nextCardLocation) {
-        this.nextCardLocation = nextCardLocation;
-    }
-
     /**
-     * @return the delta value in pixels corresponding to
-     * space between each card spread.
+     * @return <CODE>true</CODE>, if the stack is empty.
+     * <CODE>false</CODE> otherwise.
      */
-    public int getSpreadingDelta() {
-        return spreadingDelta;
+    public boolean isEmpty() {
+        return cards.isEmpty();
     }
 
     /**
@@ -334,27 +307,11 @@ public class Stack {
     }
 
     /**
-     * @return the constants corresponding to the spreading
-     * direction of the stack of cards.
-     */
-    public int getSpreadingDirection() {
-        return spreadDirection;
-    }
-
-    /**
      * @param sd Constant corresponding to the spreading
      *           direction of the stack of cards.
      */
     public void setSpreadingDirection(int sd) {
         spreadDirection = sd;
-    }
-
-    /**
-     * @return <CODE>true</CODE>, if the stack is empty.
-     * <CODE>false</CODE> otherwise.
-     */
-    public boolean isEmpty() {
-        return cards.isEmpty();
     }
 }
 
