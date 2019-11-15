@@ -33,15 +33,11 @@ public class Util {
      * @return Instance of an <code>Image</code>.
      */
     public static Image getImageResourceFile(String strResourceFilename, Class srcClass) {
-        PngImage pngImage = null;
+        PngImage pngImage;
         Image image = null;
         try {
             BufferedInputStream in = new BufferedInputStream(
                     srcClass.getResourceAsStream(strResourceFilename));
-            if (in == null) {
-                System.err.println("Image not found:" + strResourceFilename);
-                return null;
-            }
             if (strResourceFilename.endsWith(".png")) {
                 pngImage = new PngImage(in);
                 image = Toolkit.getDefaultToolkit().createImage(pngImage);
@@ -63,10 +59,10 @@ public class Util {
      * @param images Array of <code>Image</code> instances to preload.
      * @param comp   Component that will observe the loading state of the images.
      */
-    public static void loadImages(Image[] images, Component comp) {
+    static void loadImages(Image[] images, Component comp) {
         MediaTracker tracker = new MediaTracker(comp);
-        for (int i = 0; i < images.length; i++)
-            tracker.addImage(images[i], 0);
+        for (Image image : images)
+            tracker.addImage(image, 0);
         try {
             tracker.waitForID(0);
         } catch (InterruptedException ignore) {
@@ -78,8 +74,9 @@ public class Util {
      *
      * @param in  Input stream.
      * @param out Output stream.
-     * @throws IOException
+     * @throws IOException io
      */
+    @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
     public static void copy(InputStream in, OutputStream out) throws IOException {
         // Do not allow other threads to read from the
         // input or write to the output while copying is

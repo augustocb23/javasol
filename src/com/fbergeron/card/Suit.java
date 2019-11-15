@@ -28,12 +28,12 @@ package com.fbergeron.card;
  */
 public class Suit {
 
-    public static final Suit HEART = new Suit("H");
-    public static final Suit SPADE = new Suit("S");
-    public static final Suit DIAMOND = new Suit("D");
-    public static final Suit CLUB = new Suit("C");
+    static final Suit HEART = new Suit("H");
+    static final Suit SPADE = new Suit("S");
+    static final Suit DIAMOND = new Suit("D");
+    static final Suit CLUB = new Suit("C");
 
-    public static final Suit[] suits = {HEART, SPADE, DIAMOND, CLUB};
+    static final Suit[] suits = {HEART, SPADE, DIAMOND, CLUB};
     private String id;
 
     private Suit(String id) {
