@@ -26,24 +26,16 @@ import java.awt.*;
  */
 public class ImagePanel extends Panel {
 
-    private boolean isDoubleBuffered;
-    private boolean isImgLoaded;
     private Image img;
     private Image offscreen;
     private Graphics offscreenGr;
-
-    /**
-     * Create an <code>ImagePanel</code> without image.
-     */
-    public ImagePanel() {
-    }
 
     /**
      * Create an <code>ImagePanel</code> with an image.
      *
      * @param image Image to be drawn on the canvas.
      */
-    public ImagePanel(Image image) {
+    ImagePanel(Image image) {
         setImage(image);
     }
 
@@ -63,11 +55,6 @@ public class ImagePanel extends Panel {
      * @param g Graphics on which we draw the panel.
      */
     public void update(Graphics g) {
-        if (!isDoubleBuffered) {
-            paint(g);
-            return;
-        }
-
         //Create offscreen
         Dimension dim = this.getSize();
         if (offscreen == null) {
@@ -107,7 +94,6 @@ public class ImagePanel extends Panel {
         }
 
         // Draw the image when loaded.
-        isImgLoaded = true;
         Dimension dim = getSize();
         int imgWidth = img.getWidth(this);
         int imgHeight = img.getHeight(this);
@@ -119,14 +105,6 @@ public class ImagePanel extends Panel {
         if (y < 0)
             y = 0;
         g.drawImage(img, x, y, this);
-    }
-
-    /**
-     * Clean up the offscreen when the canvas is destroyed.
-     */
-    public void destroy() {
-        if (offscreenGr != null)
-            offscreenGr.dispose();
     }
 
     /**
@@ -144,40 +122,12 @@ public class ImagePanel extends Panel {
     }
 
     /**
-     * @return <code>true</code> if the canvas uses an offscreen to draw itself.
-     */
-    public boolean isDoubleBuffered() {
-        return (isDoubleBuffered);
-    }
-
-    /**
-     * Set if whether the canvas must draw itself in an offscreen before rendering.
-     * <p>
-     * By default, <code>ImagePanel</code> doesn't use an offscreen.
-     *
-     * @param isDoubleBuffered <code>true</code> to use an offscreen.
-     */
-    public void setDoubleBuffered(boolean isDoubleBuffered) {
-        isDoubleBuffered = isDoubleBuffered;
-        repaint();
-    }
-
-    /**
-     * @return <code>true</code> if the image has been specified and if it is loaded,
-     * <code>false</code>, otherwise.
-     */
-    public boolean isImageLoaded() {
-        return (isImgLoaded);
-    }
-
-    /**
      * Affect an image to the panel and redraw it.
      *
      * @param image Image to be drawn on the panel.
      */
-    public void setImage(Image image) {
+    private void setImage(Image image) {
         img = image;
-        isImgLoaded = false;
         repaint();
     }
 

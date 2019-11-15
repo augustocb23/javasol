@@ -20,8 +20,6 @@
 package com.fbergeron.util;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -32,23 +30,15 @@ public class FrameAbout extends Frame {
 
     private static final String CARD_ABOUT = "About";
     private static final String CARD_CREDITS = "Credits";
-    private CardLayout cardLayout;
-    private Panel panelAbout;
-    private Panel panelCredits;
     private Label labelVersion;
-    private ImagePanel panelPicture;
-    private Panel panelBottom;
     private Button buttonShowCredits;
     private Label labelCredits;
     private TextArea textAreaCredits;
     private Button buttonHideCredits;
-    private Panel panelButtons;
-    private Panel panelAuthor;
     private Label labelDate;
     private Label labelAuthor;
     private Label labelEmail;
     private Label labelWebSite;
-    private ResourceBundle resBundle;
 
     /**
      * Constructor for FrameAbout.
@@ -56,27 +46,23 @@ public class FrameAbout extends Frame {
     public FrameAbout() {
         setLayout(new CardLayout());
 
-        panelAbout = new Panel(new BorderLayout());
+        Panel panelAbout = new Panel(new BorderLayout());
         panelAbout.setBackground(Color.white);
 
         Image imgLogo = Util.getImageResourceFile("logo.jpg", getClass());
         Util.loadImages(new Image[]{imgLogo}, this);
-        panelPicture = new ImagePanel(imgLogo);
+        ImagePanel panelPicture = new ImagePanel(imgLogo);
 
-        panelBottom = new Panel(new BorderLayout());
+        Panel panelBottom = new Panel(new BorderLayout());
 
-        panelButtons = new Panel(new BorderLayout());
+        Panel panelButtons = new Panel(new BorderLayout());
         buttonShowCredits = new Button();
         buttonShowCredits.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        showCredits();
-                    }
-                }
+                evt -> showCredits()
         );
         panelButtons.add(buttonShowCredits, BorderLayout.SOUTH);
 
-        panelAuthor = new Panel(new GridLayout(0, 1));
+        Panel panelAuthor = new Panel(new GridLayout(0, 1));
         labelVersion = new Label("", Label.RIGHT);
         labelAuthor = new Label("", Label.RIGHT);
         labelEmail = new Label("", Label.RIGHT);
@@ -94,7 +80,7 @@ public class FrameAbout extends Frame {
         panelAbout.add(panelPicture, BorderLayout.CENTER);
         panelAbout.add(panelBottom, BorderLayout.SOUTH);
 
-        panelCredits = new Panel(new BorderLayout(5, 5));
+        Panel panelCredits = new Panel(new BorderLayout(5, 5));
         panelCredits.setBackground(Color.white);
 
         labelCredits = new Label();
@@ -102,11 +88,7 @@ public class FrameAbout extends Frame {
 
         buttonHideCredits = new Button();
         buttonHideCredits.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        hideCredits();
-                    }
-                }
+                evt -> hideCredits()
         );
 
         panelCredits.add(labelCredits, BorderLayout.NORTH);
@@ -147,7 +129,7 @@ public class FrameAbout extends Frame {
     public void setLocale(Locale locale) {
         super.setLocale(locale);
 
-        resBundle = ResourceBundle.getBundle(getClass().getName() + "Ress", locale);
+        ResourceBundle resBundle = ResourceBundle.getBundle(getClass().getName() + "Ress", locale);
 
         buttonShowCredits.setLabel(resBundle.getString("ShowCredits"));
         buttonHideCredits.setLabel(resBundle.getString("HideCredits"));

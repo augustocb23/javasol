@@ -25,8 +25,8 @@ import java.awt.event.WindowEvent;
 public class WindowManager extends WindowAdapter {
 
     public static final int HIDE_ON_CLOSE = 0;
-    public static final int DISPOSE_ON_CLOSE = 1;
     public static final int EXIT_ON_CLOSE = 2;
+    static final int DISPOSE_ON_CLOSE = 1;
     private int action;
     private Window window;
 

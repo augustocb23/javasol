@@ -22,8 +22,6 @@ package com.fbergeron.util;
 import java.awt.*;
 
 public class DialogMsg extends Dialog {
-    Panel panelBackground;
-    TextArea textAreaMsg;
 
     /**
      * Simple dialog that displays a message.
@@ -41,12 +39,12 @@ public class DialogMsg extends Dialog {
         setSize(240, 110);
         setBackground(new Color(12632256));
 
-        panelBackground = new java.awt.Panel();
+        Panel panelBackground = new Panel();
         panelBackground.setLayout(new BorderLayout(0, 0));
         panelBackground.setBackground(Color.white);
         add("Center", panelBackground);
 
-        textAreaMsg = new java.awt.TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
+        TextArea textAreaMsg = new TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
         textAreaMsg.setEditable(false);
         textAreaMsg.setText(strMsg);
         //textAreaMsg.setBackground(new Color(16777199));
