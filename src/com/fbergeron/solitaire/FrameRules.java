@@ -25,8 +25,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class FrameRules extends Frame {
-    java.awt.TextArea textAreaHelp = new java.awt.TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
-    private ResourceBundle resBundle;
+    private java.awt.TextArea textAreaHelp = new java.awt.TextArea("", 0, 0, TextArea.SCROLLBARS_VERTICAL_ONLY);
 
     public FrameRules() {
         setLayout(new BorderLayout(0, 0));
@@ -52,7 +51,7 @@ public class FrameRules extends Frame {
     public void setLocale(Locale locale) {
         super.setLocale(locale);
 
-        resBundle = ResourceBundle.getBundle(getClass().getName() + "Ress", locale);
+        ResourceBundle resBundle = ResourceBundle.getBundle(getClass().getName() + "Ress", locale);
 
         textAreaHelp.setText(resBundle.getString("Rules01"));
         setTitle(resBundle.getString("Rules"));
