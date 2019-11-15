@@ -24,13 +24,13 @@ import java.awt.*;
 
 public class FrameCongratulations extends Frame {
     // Used for addNotify check.
-    boolean fComponentsAdjusted = false;
-    java.awt.Label labelCongratulations = new java.awt.Label();
+    private boolean fComponentsAdjusted = false;
 
-    public FrameCongratulations() {
+    FrameCongratulations() {
         setLayout(new BorderLayout(0, 0));
         setSize(200, 100);
         setVisible(false);
+        Label labelCongratulations = new Label();
         labelCongratulations.setAlignment(java.awt.Label.CENTER);
         labelCongratulations.setEnabled(false);
         add(BorderLayout.CENTER, labelCongratulations);
@@ -55,12 +55,13 @@ public class FrameCongratulations extends Frame {
             return;
 
         // Adjust components according to the insets
-        setSize(getInsets().left + getInsets().right + d.width, getInsets().top + getInsets().bottom + d.height);
+        setSize(getInsets().left + getInsets().right + d.width,
+                getInsets().top + getInsets().bottom + d.height);
         Component[] components = getComponents();
-        for (int i = 0; i < components.length; i++) {
-            Point p = components[i].getLocation();
+        for (Component component : components) {
+            Point p = component.getLocation();
             p.translate(getInsets().left, getInsets().top);
-            components[i].setLocation(p);
+            component.setLocation(p);
         }
         fComponentsAdjusted = true;
     }
