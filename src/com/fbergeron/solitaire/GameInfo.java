@@ -28,50 +28,50 @@ package com.fbergeron.solitaire;
 public class GameInfo {
 
     // Game Types
-    public static final String RANDOM = "Random";
-    public static final String WINNABLE_EASY = "Winnable-Easy";
-    public static final String WINNABLE_NORMAL = "Winnable-Normal";
-    public static final String WINNABLE_HARD = "Winnable-Hard";
-    public static final String WINNABLE_TRICKY = "Winnable-Tricky";
+    static final String RANDOM = "Random";
+    static final String WINNABLE_EASY = "Winnable-Easy";
+    static final String WINNABLE_NORMAL = "Winnable-Normal";
+    static final String WINNABLE_HARD = "Winnable-Hard";
+    static final String WINNABLE_TRICKY = "Winnable-Tricky";
     private String type = RANDOM;
     private int seed = -1;
 
-    public GameInfo() {
+    GameInfo() {
     }
 
-    public GameInfo(String type, int seed) {
+    GameInfo(String type, int seed) {
         this.type = type;
         this.seed = seed;
     }
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof GameInfo))
-            return (false);
+        if (!(obj instanceof GameInfo))
+            return false;
         GameInfo gi = (GameInfo) obj;
-        return (type.equals(gi.getType()) && seed == gi.getSeed());
+        return type.equals(gi.getType()) && seed == gi.getSeed();
     }
 
     public int hashCode() {
-        return ((type + "|" + seed).hashCode());
+        return (type + "|" + seed).hashCode();
     }
 
     public String toString() {
-        return (type + "|" + seed);
+        return type + "|" + seed;
     }
 
-    public int getSeed() {
-        return (seed);
+    int getSeed() {
+        return seed;
     }
 
-    public void setSeed(int seed) {
+    void setSeed(int seed) {
         this.seed = seed;
     }
 
-    public String getType() {
-        return (type);
+    String getType() {
+        return type;
     }
 
-    public void setType(String type) {
+    void setType(String type) {
         this.type = type;
     }
 
