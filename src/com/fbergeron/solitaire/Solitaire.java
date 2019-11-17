@@ -326,11 +326,11 @@ public class Solitaire extends Frame {
             revealedCards.push(c);
         }
         // Save the state of the game after the move
-        pushGameState(new GameState(gameInfo, deck, revealedCards, solStack, seqStack, null, null, null));
+        pushGameState(GameState.copyGameState(gameInfo, deck, revealedCards, solStack, seqStack));
 
         // Flag which cards can be moved legally
         GameState gs = new GameState(gameInfo, deck, revealedCards, solStack, seqStack);
-        legalGs = gs.legalMoves(false);
+        legalGs = gs.legalMoves();
 
         if (table != null)
             table.repaint();
@@ -354,11 +354,11 @@ public class Solitaire extends Frame {
                 topCard.turnFaceUp();
             }
             // Save the state of the game after the move
-            pushGameState(new GameState(gameInfo, deck, revealedCards, solStack, seqStack, null, null, null));
+            pushGameState(GameState.copyGameState(gameInfo, deck, revealedCards, solStack, seqStack));
 
             // Flag which cards can be moved legally
             GameState gs = new GameState(gameInfo, deck, revealedCards, solStack, seqStack);
-            legalGs = gs.legalMoves(false);
+            legalGs = gs.legalMoves();
 
             if (isGameWon())
                 congratulate();
@@ -384,11 +384,11 @@ public class Solitaire extends Frame {
         }
 
         // Save the initial game state
-        pushGameState(new GameState(gameInfo, deck, revealedCards, solStack, seqStack, null, null, null));
+        pushGameState(GameState.copyGameState(gameInfo, deck, revealedCards, solStack, seqStack));
 
         // Flag which cards can be moved legally
         GameState gs = new GameState(gameInfo, deck, revealedCards, solStack, seqStack);
-        legalGs = gs.legalMoves(false);
+        legalGs = gs.legalMoves();
     }
 
     /**
@@ -924,13 +924,13 @@ public class Solitaire extends Frame {
 
     class RestartListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            gameStates.get(0).restoreGameState(gameInfo, deck, revealedCards, solStack, seqStack, null);
+            gameStates.get(0).restoreGameState(gameInfo, deck, revealedCards, solStack, seqStack);
             gameStates = new ArrayList<GameState>();
-            pushGameState(new GameState(gameInfo, deck, revealedCards, solStack, seqStack, null, null, null));
+            pushGameState(GameState.copyGameState(gameInfo, deck, revealedCards, solStack, seqStack));
 
             // Flag which cards can be moved legally
             GameState gs = new GameState(gameInfo, deck, revealedCards, solStack, seqStack);
-            legalGs = gs.legalMoves(false);
+            legalGs = gs.legalMoves();
 
             table.repaint();
         }
@@ -940,13 +940,13 @@ public class Solitaire extends Frame {
         public void actionPerformed(ActionEvent e) {
             if (gameStates.size() - 2 >= 0) {
                 gameStates.get(gameStates.size() - 2).restoreGameState(gameInfo, deck, revealedCards, solStack,
-                        seqStack, null);
+                        seqStack);
                 popGameState();
             }
             GameState gs = new GameState(gameInfo, deck, revealedCards, solStack, seqStack);
 
             // Flag which cards can be moved legally
-            legalGs = gs.legalMoves(false);
+            legalGs = gs.legalMoves();
 
             table.repaint();
         }
