@@ -160,31 +160,31 @@ public class GameState {
             if (j != -1) {
                 // Can this card be moved to another solitaire stack slot?
                 c = ((ClassicCard) this.solStack[i].elementAt(j));
-                legalSolToSol(c, i);
+                legalSolToSol(legalGs, c, i);
                 // Can this card be moved to a sequential stack?
-                legalSolToSeq(c, i);
+                legalSolToSeq(legalGs, c, i);
 
                 if (j + 1 != this.solStack[i].cardCount()) {
                     // If 1st turned over not equal top card then try legal moves on top card
                     j = this.solStack[i].cardCount() - 1;
                     c = ((ClassicCard) this.solStack[i].elementAt(j));
                     // Can this card be moved to a sequential stack?
-                    legalSolToSeq(c, i);
+                    legalSolToSeq(legalGs, c, i);
                 }
             }
         }
 
         c = (ClassicCard) this.revealedCards.top();
         // Check Revealed cards legal move to sequential stacks
-        legalRevToSeq(c);
+        legalRevToSeq(legalGs, c);
         // Check Revealed cards legal moves to solitaire stacks
-        legalRevToSol(c);
+        legalRevToSol(legalGs, c);
 
         return legalGs;
     }
 
     // Check if card can be moved from one sol stack to another
-    private void legalSolToSol(ClassicCard c, int i) {
+    private void legalSolToSol(ArrayList<GameState> legalGs, ClassicCard c, int i) {
         if (c.getValue() == Value.V_ACE) {
             // Never move an ace between sol stacks only to a sequential stack
             return;
@@ -208,6 +208,7 @@ public class GameState {
                             // Move is legal so apply move and store result gamestate in legal games states
                             ClassicCard cOut = ((ClassicCard) currStack.elementAt(currStack.cardCount() - 1));
                             cOut.setLegal(true);
+                            legalGs.add(copyGameState(this));
                         }
                     }
                 }
@@ -219,7 +220,7 @@ public class GameState {
     }
 
     // Check if card can be moved to a sequential stack
-    private void legalSolToSeq(ClassicCard c, int i) {
+    private void legalSolToSeq(ArrayList<GameState> legalGs, ClassicCard c, int i) {
         Stack src = this.solStack[i];
         Stack currStack = src.pop(c);
         if (currStack.cardCount() > 2) {
@@ -235,6 +236,7 @@ public class GameState {
                 ClassicCard cOut = ((ClassicCard) currStack.elementAt(currStack.cardCount() - 1));
 
                 cOut.setLegal(true);
+                legalGs.add(copyGameState(this));
                 for (; !currStack.isEmpty(); )
                     src.push(currStack.pop());
                 // if can go on one sequential stack no need to check the others
@@ -246,8 +248,17 @@ public class GameState {
             src.push(currStack.pop());
     }
 
+    private GameState copyGameState(GameState gameState) {
+        return copyGameState(
+                gameState.gameInfo,
+                gameState.deck,
+                gameState.revealedCards,
+                gameState.solStack,
+                gameState.seqStack);
+    }
+
     // Check if revealed card can be place on one of the solitaire stacks
-    private void legalRevToSol(ClassicCard c) {
+    private void legalRevToSol(ArrayList<GameState> legalGs, ClassicCard c) {
         if (this.revealedCards.isEmpty())
             return;
         Stack src = this.revealedCards;
@@ -259,6 +270,7 @@ public class GameState {
                 // Move is legal so apply move and store result gamestate in legal games states
                 ClassicCard cOut = ((ClassicCard) currStack.elementAt(0));
                 cOut.setLegal(true);
+                legalGs.add(copyGameState(this));
             }
         }
         // put cards back on src stack
@@ -267,7 +279,7 @@ public class GameState {
     }
 
     // Check if revealed card can be place on one of the sequential stacks
-    private void legalRevToSeq(ClassicCard c) {
+    private void legalRevToSeq(ArrayList<GameState> legalGs, ClassicCard c) {
         Stack curr;
         Stack currStack;
         Stack src;
@@ -290,9 +302,10 @@ public class GameState {
             dst = this.seqStack[j2];
             if (dst != null && dst.isValid(curr)) {
                 // Only consider the move if it turns over a card or empties a stack
-                // Move is legal so apply move and store result gamestate in legal games states
+                // Move is legal so apply move and store result game state in legal games states
                 ClassicCard cOut = ((ClassicCard) curr.elementAt(0));
                 cOut.setLegal(true);
+                legalGs.add(copyGameState(this));
                 for (; !curr.isEmpty(); )
                     src.push(curr.pop());
                 // if can go on one sequential stack no need to check the others
@@ -350,9 +363,5 @@ public class GameState {
                 solStack[i].push(c);
             }
         }
-    }
-
-    public String toString() {
-        return (gameInfo.toString());
     }
 }

@@ -37,7 +37,7 @@ class SolitaireStack extends Stack {
      * @return <CODE>true</CODE>, if it's allowed.
      * <CODE>false</CODE> otherwise.
      */
-    public boolean isValid(ClassicCard c) {
+    private boolean isValid(ClassicCard c) {
         if (isEmpty())
             return (c.getValue() == Value.V_KING);
         else

@@ -96,7 +96,7 @@ public class ClassicCard extends Card {
             this.turnFaceUp();
     }
 
-    ClassicCard(Value value, Suit suit) {
+    public ClassicCard(Value value, Suit suit) {
         super();
         this.suit = suit;
         this.value = value;
