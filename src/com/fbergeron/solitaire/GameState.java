@@ -67,13 +67,13 @@ public class GameState {
         dest.gameInfo = new GameInfo(gameInfo.getType(), gameInfo.getSeed());
         dest.deck = new ClassicDeck();
         for (int i = 0; i < deck.cardCount(); i++) {
-            ClassicCard currentCard = ((ClassicCard) deck.elementAt(i));
+            ClassicCard currentCard = (ClassicCard) deck.elementAt(i);
             ClassicCard c = new ClassicCard(currentCard);
             dest.deck.push(c);
         }
         dest.revealedCards = new Stack();
         for (int i = 0; i < revealedCards.cardCount(); i++) {
-            ClassicCard currentCard = ((ClassicCard) revealedCards.elementAt(i));
+            ClassicCard currentCard = (ClassicCard) revealedCards.elementAt(i);
             ClassicCard c = new ClassicCard(currentCard);
             dest.revealedCards.push(c);
         }
@@ -82,7 +82,7 @@ public class GameState {
         for (int i = 0; i < Solitaire.SOL_STACK_CNT; i++) {
             dest.solStack[i] = new SolitaireStack();
             for (int j = 0; j < solStack[i].cardCount(); j++) {
-                ClassicCard currentCard = ((ClassicCard) solStack[i].elementAt(j));
+                ClassicCard currentCard = (ClassicCard) solStack[i].elementAt(j);
                 ClassicCard c = new ClassicCard(currentCard);
                 dest.solStack[i].push(c);
             }
@@ -91,7 +91,7 @@ public class GameState {
         for (int i = 0; i < Solitaire.SEQ_STACK_CNT; i++) {
             dest.seqStack[i] = new SequentialStack();
             for (int j = 0; j < seqStack[i].cardCount(); j++) {
-                ClassicCard currentCard = ((ClassicCard) seqStack[i].elementAt(j));
+                ClassicCard currentCard = (ClassicCard) seqStack[i].elementAt(j);
                 ClassicCard c = new ClassicCard(currentCard);
                 dest.seqStack[i].push(c);
             }
@@ -101,11 +101,11 @@ public class GameState {
 
     public boolean equals(Object obj) {
         if (!(obj instanceof GameState))
-            return (false);
+            return false;
 
         GameState gs = (GameState) obj;
         if (!this.gameInfo.equals(gs.gameInfo))
-            return (false);
+            return false;
         if (this.deck.getCards().size() != gs.deck.getCards().size() ||
                 this.revealedCards.getCards().size() != gs.revealedCards.getCards().size()) {
             return false;
@@ -134,22 +134,22 @@ public class GameState {
         // Set all cards to not legal
         for (int i = 0; i < Solitaire.SOL_STACK_CNT; i++) {
             for (int k = 0; k < this.solStack[i].cardCount(); k++) {
-                ClassicCard cc = (ClassicCard) (this.solStack[i].elementAt(k));
+                ClassicCard cc = (ClassicCard) this.solStack[i].elementAt(k);
                 cc.setLegal(false);
             }
         }
         for (int i = 0; i < Solitaire.SEQ_STACK_CNT; i++) {
             for (int k = 0; k < this.seqStack[i].cardCount(); k++) {
-                ClassicCard cc = (ClassicCard) (this.seqStack[i].elementAt(k));
+                ClassicCard cc = (ClassicCard) this.seqStack[i].elementAt(k);
                 cc.setLegal(false);
             }
         }
         for (int i = 0; i < this.revealedCards.cardCount(); i++) {
-            ClassicCard cc = (ClassicCard) (this.revealedCards.elementAt(i));
+            ClassicCard cc = (ClassicCard) this.revealedCards.elementAt(i);
             cc.setLegal(false);
         }
         for (int i = 0; i < this.deck.cardCount(); i++) {
-            ClassicCard cc = (ClassicCard) (this.deck.elementAt(i));
+            ClassicCard cc = (ClassicCard) this.deck.elementAt(i);
             cc.setLegal(false);
         }
 
@@ -159,7 +159,7 @@ public class GameState {
             // Find 1st turned over card in stack
             if (j != -1) {
                 // Can this card be moved to another solitaire stack slot?
-                c = ((ClassicCard) this.solStack[i].elementAt(j));
+                c = (ClassicCard) this.solStack[i].elementAt(j);
                 legalSolToSol(legalGs, c, i);
                 // Can this card be moved to a sequential stack?
                 legalSolToSeq(legalGs, c, i);
@@ -167,7 +167,7 @@ public class GameState {
                 if (j + 1 != this.solStack[i].cardCount()) {
                     // If 1st turned over not equal top card then try legal moves on top card
                     j = this.solStack[i].cardCount() - 1;
-                    c = ((ClassicCard) this.solStack[i].elementAt(j));
+                    c = (ClassicCard) this.solStack[i].elementAt(j);
                     // Can this card be moved to a sequential stack?
                     legalSolToSeq(legalGs, c, i);
                 }
@@ -206,7 +206,7 @@ public class GameState {
                         if (!(src.isEmpty() && dst.isEmpty())) {
                             //                  if (!src.isEmpty() && !dst.isEmpty()){
                             // Move is legal so apply move and store result gamestate in legal games states
-                            ClassicCard cOut = ((ClassicCard) currStack.elementAt(currStack.cardCount() - 1));
+                            ClassicCard cOut = (ClassicCard) currStack.elementAt(currStack.cardCount() - 1);
                             cOut.setLegal(true);
                             legalGs.add(copyGameState(this));
                         }
@@ -233,7 +233,7 @@ public class GameState {
             Stack dst = this.seqStack[j2];
             if (dst != null && dst.isValid(currStack)) {
                 // Move is legal so apply move and store result gamestate in legal games states
-                ClassicCard cOut = ((ClassicCard) currStack.elementAt(currStack.cardCount() - 1));
+                ClassicCard cOut = (ClassicCard) currStack.elementAt(currStack.cardCount() - 1);
 
                 cOut.setLegal(true);
                 legalGs.add(copyGameState(this));
@@ -268,7 +268,7 @@ public class GameState {
             if (dst != null && dst.isValid(currStack)) {
 
                 // Move is legal so apply move and store result gamestate in legal games states
-                ClassicCard cOut = ((ClassicCard) currStack.elementAt(0));
+                ClassicCard cOut = (ClassicCard) currStack.elementAt(0);
                 cOut.setLegal(true);
                 legalGs.add(copyGameState(this));
             }
@@ -303,7 +303,7 @@ public class GameState {
             if (dst != null && dst.isValid(curr)) {
                 // Only consider the move if it turns over a card or empties a stack
                 // Move is legal so apply move and store result game state in legal games states
-                ClassicCard cOut = ((ClassicCard) curr.elementAt(0));
+                ClassicCard cOut = (ClassicCard) curr.elementAt(0);
                 cOut.setLegal(true);
                 legalGs.add(copyGameState(this));
                 for (; !curr.isEmpty(); )
@@ -329,7 +329,7 @@ public class GameState {
             revealedCards.pop();
         }
         for (int i = 0; i < this.revealedCards.cardCount(); i++) {
-            ClassicCard currentCard = ((ClassicCard) this.revealedCards.elementAt(i));
+            ClassicCard currentCard = (ClassicCard) this.revealedCards.elementAt(i);
             ClassicCard c = new ClassicCard(currentCard);
             revealedCards.push(c);
 
@@ -338,7 +338,7 @@ public class GameState {
             deck.pop();
         }
         for (int i = 0; i < this.deck.cardCount(); i++) {
-            ClassicCard currentCard = ((ClassicCard) this.deck.elementAt(i));
+            ClassicCard currentCard = (ClassicCard) this.deck.elementAt(i);
             ClassicCard c = new ClassicCard(currentCard);
             deck.push(c);
         }
@@ -347,7 +347,7 @@ public class GameState {
                 seqStack[i].pop();
             }
             for (int j = 0; j < this.seqStack[i].cardCount(); j++) {
-                ClassicCard currentCard = ((ClassicCard) this.seqStack[i].elementAt(j));
+                ClassicCard currentCard = (ClassicCard) this.seqStack[i].elementAt(j);
                 ClassicCard c = new ClassicCard(currentCard);
                 seqStack[i].push(c);
             }
@@ -358,7 +358,7 @@ public class GameState {
             }
 
             for (int j = 0; j < this.solStack[i].cardCount(); j++) {
-                ClassicCard currentCard = ((ClassicCard) this.solStack[i].elementAt(j));
+                ClassicCard currentCard = (ClassicCard) this.solStack[i].elementAt(j);
                 ClassicCard c = new ClassicCard(currentCard);
                 solStack[i].push(c);
             }

@@ -141,5 +141,46 @@ public class GameStateTest {
 
     @Test
     public void restoreGameState() {
+        // cria um game state
+        GameInfo gameInfo = new GameInfo(GameInfo.RANDOM, 255);
+        ClassicDeck deck = new ClassicDeck();
+        SolitaireStack[] solitaireStacks = IntStream.range(0, Solitaire.SOL_STACK_CNT)
+                .mapToObj(i -> new SolitaireStack()).toArray(SolitaireStack[]::new);
+        SequentialStack[] sequentialStacks = IntStream.range(0, Solitaire.SEQ_STACK_CNT)
+                .mapToObj(i -> new SequentialStack()).toArray(SequentialStack[]::new);
+        Stack currentStack = new Stack();
+
+        Card card01 = new ClassicCard(Value.V_ACE, Suit.SPADE);
+        Card card02 = new ClassicCard(Value.V_ACE, Suit.DIAMOND);
+        Card card03 = new ClassicCard(Value.V_ACE, Suit.HEART);
+        Card card04 = new ClassicCard(Value.V_ACE, Suit.CLUB);
+        Card card05 = new ClassicCard(Value.V_2, Suit.SPADE);
+
+        // vira as cartas
+        card01.turnFaceUp();
+        card02.turnFaceUp();
+        card03.turnFaceUp();
+        card04.turnFaceUp();
+        card05.turnFaceUp();
+
+        // adiciona nas pilhas
+        sequentialStacks[0].push(card01);
+        sequentialStacks[1].push(card02);
+        sequentialStacks[2].push(card03);
+        sequentialStacks[3].push(card04);
+        currentStack.push(card05);
+
+        // armazena o gameState atual (para o teste)
+        GameState undo = GameState.copyGameState(gameInfo, deck, currentStack, solitaireStacks, sequentialStacks);
+
+        // simula uma jogada
+        Card card = currentStack.pop();
+        sequentialStacks[0].push(card);
+
+        // desfaz a jogada e salva o gameState
+        undo.restoreGameState(gameInfo, deck, currentStack, solitaireStacks, sequentialStacks);
+        GameState gameState = new GameState(gameInfo, deck, currentStack, solitaireStacks, sequentialStacks);
+
+        assertEquals(undo, gameState);
     }
 }

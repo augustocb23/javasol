@@ -54,16 +54,16 @@ public class ClassicCardTest {
 
     @Test
     public void testEquals() {
-        ClassicCard template = new ClassicCard(Value.V_1, Suit.SPADE);
-        ClassicCard classicCard = new ClassicCard(Value.V_1, Suit.SPADE);
+        ClassicCard template = new ClassicCard(Value.V_ACE, Suit.SPADE);
+        ClassicCard classicCard = new ClassicCard(Value.V_ACE, Suit.SPADE);
 
         assertEquals(template, classicCard);
     }
 
     @Test
     public void testNotEquals() {
-        ClassicCard template = new ClassicCard(Value.V_1, Suit.SPADE);
-        ClassicCard classicCard = new ClassicCard(Value.V_1, Suit.HEART);
+        ClassicCard template = new ClassicCard(Value.V_ACE, Suit.SPADE);
+        ClassicCard classicCard = new ClassicCard(Value.V_ACE, Suit.HEART);
 
         assertNotEquals(template, classicCard);
     }
@@ -79,25 +79,25 @@ public class ClassicCardTest {
 
     @Test
     public void getColor_black() {
-        ClassicCard classicCard = new ClassicCard(Value.V_1, Suit.SPADE);
+        ClassicCard classicCard = new ClassicCard(Value.V_ACE, Suit.SPADE);
         assertEquals(Color.black, classicCard.getColor());
     }
 
     @Test
     public void getColor_red() {
-        ClassicCard classicCard = new ClassicCard(Value.V_1, Suit.HEART);
+        ClassicCard classicCard = new ClassicCard(Value.V_ACE, Suit.HEART);
         assertEquals(Color.red, classicCard.getColor());
     }
 
     @Test
     public void getSuit() {
-        ClassicCard classicCard = new ClassicCard(Value.V_1, Suit.HEART);
+        ClassicCard classicCard = new ClassicCard(Value.V_ACE, Suit.HEART);
         assertEquals(Suit.HEART, classicCard.getSuit());
     }
 
     @Test
     public void getValue() {
-        ClassicCard classicCard = new ClassicCard(Value.V_1, Suit.HEART);
-        assertEquals(Value.V_1, classicCard.getValue());
+        ClassicCard classicCard = new ClassicCard(Value.V_ACE, Suit.HEART);
+        assertEquals(Value.V_ACE, classicCard.getValue());
     }
 }
