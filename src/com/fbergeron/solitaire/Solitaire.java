@@ -28,7 +28,10 @@ import com.fbergeron.util.WindowManager;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Random;
+import java.util.ResourceBundle;
 
 /**
  * Java version of the famous card game.
@@ -39,38 +42,37 @@ import java.util.*;
  */
 public class Solitaire extends Frame {
     /** Number of sequential stacks. */
-    public static final int SEQ_STACK_CNT = 4;
+    static final int SEQ_STACK_CNT = 4;
 
     /** Number of solitaire stacks. */
-    public static final int SOL_STACK_CNT = 7;
+    static final int SOL_STACK_CNT = 7;
 
     /** Number of cards freed from the deck when requested. */
-    public static final int FREED_CARDS_CNT = 3;
+    private static final int FREED_CARDS_CNT = 3;
 
-    public static final Point DECK_POS = new Point(5, 5);
-    public static final Point REVEALED_CARDS_POS = new Point(DECK_POS.x + ClassicCard.DEFAULT_WIDTH + 5, 5);
-    public static final Point SEQ_STACK_POS = new Point(REVEALED_CARDS_POS.x + ClassicCard.DEFAULT_WIDTH + 92,
+    private static final Point DECK_POS = new Point(5, 5);
+    private static final Point REVEALED_CARDS_POS = new Point(DECK_POS.x + ClassicCard.DEFAULT_WIDTH + 5, 5);
+    private static final Point SEQ_STACK_POS = new Point(REVEALED_CARDS_POS.x + ClassicCard.DEFAULT_WIDTH + 92,
             DECK_POS.y);
-    public static final Point SOL_STACK_POS = new Point(DECK_POS.x, SEQ_STACK_POS.y + ClassicCard.DEFAULT_HEIGHT + 5);
+    private static final Point SOL_STACK_POS = new Point(DECK_POS.x, SEQ_STACK_POS.y + ClassicCard.DEFAULT_HEIGHT + 5);
 
-    public static final Color TABLE_COLOR = new Color(0, 150, 0);
-    static protected ResourceBundle resBundle;
+    private static final Color TABLE_COLOR = new Color(0, 150, 0);
+    static ResourceBundle resBundle;
     //protected   Image               backgroundImage;
-    protected Stack currStack;
-    protected ClassicDeck deck;
-    protected Stack revealedCards;
-    protected SolitaireStack[] solStack;
-    protected SequentialStack[] seqStack;
-    protected Table table;
+    private Stack currStack;
+    private ClassicDeck deck;
+    private Stack revealedCards;
+    private SolitaireStack[] solStack;
+    private SequentialStack[] seqStack;
+    private Table table;
     // Holds the state of the solitaire game after each move
-    protected ArrayList<GameState> gameStates = new ArrayList<>();
+    private ArrayList<GameState> gameStates = new ArrayList<>();
     // Holds the winnable games classed by difficulty (100 each ATM)
-    protected int[] easyGames;
-    protected int[] normalGames;
-    protected int[] hardGames;
-    protected int[] trickyGames;
-    protected GameInfo gameInfo = new GameInfo();
-    private MenuBar menubar;
+    private int[] easyGames;
+    private int[] normalGames;
+    private int[] hardGames;
+    private int[] trickyGames;
+    private GameInfo gameInfo = new GameInfo();
     private Menu menuOptions;
     private Menu menuHelp;
     private MenuItem menuItemNewGame;
@@ -96,9 +98,9 @@ public class Solitaire extends Frame {
         setResizable(false);
 
         class LocaleListener implements ItemListener {
-            Locale locale;
+            private Locale locale;
 
-            public LocaleListener(Locale locale) {
+            private LocaleListener(Locale locale) {
                 this.locale = locale;
             }
 
@@ -108,9 +110,9 @@ public class Solitaire extends Frame {
         }
 
         class LevelListener implements ItemListener {
-            String level;
+            private String level;
 
-            public LevelListener(String level) {
+            private LevelListener(String level) {
                 this.level = level;
             }
 
@@ -141,7 +143,7 @@ public class Solitaire extends Frame {
         }
 
         //Menus
-        menubar = new MenuBar();
+        MenuBar menubar = new MenuBar();
         setMenuBar(menubar);
 
         //Menu Options
@@ -259,7 +261,7 @@ public class Solitaire extends Frame {
     /**
      * Starts a new Solitaire game.
      */
-    public void newGame() {
+    private void newGame() {
         // Get a random seed according to the game type
         gameInfo.setSeed(-1);
         Random aRandom = new Random();
@@ -308,18 +310,18 @@ public class Solitaire extends Frame {
      * Requests cards from the deck.
      * The number of new cards is equal to FREED_CARDS_CNT.
      */
-    public void getNewCards() {
+    private void getNewCards() {
         //First, restore the deck if it's empty.
         if (deck.isEmpty()) {
             for (; !revealedCards.isEmpty(); ) {
-                ClassicCard c = ((ClassicCard) revealedCards.pop());
+                ClassicCard c = (ClassicCard) revealedCards.pop();
                 c.turnFaceDown();
                 deck.push(c);
             }
         }
 
         for (int i = 0; !deck.isEmpty() && i < FREED_CARDS_CNT; i++) {
-            ClassicCard c = ((ClassicCard) deck.pop());
+            ClassicCard c = (ClassicCard) deck.pop();
             c.turnFaceUp();
             revealedCards.push(c);
         }
@@ -341,14 +343,13 @@ public class Solitaire extends Frame {
      * @param src  Stack where the card comes from.
      * @param dst  Stack where the card is played.
      */
-    public void play(Stack curr, Stack src, Stack dst) {
-        if (curr != null)
-            curr.reverse();
+    private void play(Stack curr, Stack src, Stack dst) {
+        curr.reverse();
         if (dst != null && dst.isValid(curr)) {
             for (; !curr.isEmpty(); )
                 dst.push(curr.pop());
             if (!src.isEmpty() && src.top().isFaceDown()) {
-                ClassicCard topCard = ((ClassicCard) src.top());
+                ClassicCard topCard = (ClassicCard) src.top();
                 topCard.turnFaceUp();
             }
             // Save the state of the game after the move
@@ -374,7 +375,7 @@ public class Solitaire extends Frame {
      */
     private void distributeCards() {
         for (int i = 0; i < SOL_STACK_CNT; i++) {
-            ClassicCard c = ((ClassicCard) deck.pop());
+            ClassicCard c = (ClassicCard) deck.pop();
             c.turnFaceUp();
             solStack[i].push(c);
             for (int j = i + 1; j < SOL_STACK_CNT; j++)
@@ -393,8 +394,7 @@ public class Solitaire extends Frame {
      * Shows a frame congratulating the player.
      */
     private void congratulate() {
-        FrameCongratulations f = new FrameCongratulations();
-        f.setVisible(true);
+        new FrameCongratulations().setVisible(true);
     }
 
     // Set up the game seed references according to difficulty
@@ -444,11 +444,11 @@ public class Solitaire extends Frame {
         boolean gameWon = deck.isEmpty() && revealedCards.isEmpty();
         if (gameWon)
             for (int i = 0; i < SOL_STACK_CNT && gameWon; i++)
-                gameWon = gameWon && solStack[i].isEmpty();
-        return (gameWon);
+                gameWon = solStack[i].isEmpty();
+        return gameWon;
     }
 
-    public void setGameType(String gameType) {
+    private void setGameType(String gameType) {
         this.gameInfo.setType(gameType);
         menuItemLevelRandom.setState(GameInfo.RANDOM.equals(gameType));
         menuItemLevelEasy.setState(GameInfo.WINNABLE_EASY.equals(gameType));
@@ -530,7 +530,7 @@ public class Solitaire extends Frame {
     class RestartListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             gameStates.get(0).restoreGameState(gameInfo, deck, revealedCards, solStack, seqStack);
-            gameStates = new ArrayList<GameState>();
+            gameStates = new ArrayList<>();
             pushGameState(GameState.copyGameState(gameInfo, deck, revealedCards, solStack, seqStack));
 
             // Flag which cards can be moved legally
@@ -593,18 +593,18 @@ public class Solitaire extends Frame {
                 else {
                     if (!revealedCards.isEmpty() && revealedCards.top().contains(p)) {
                         src = revealedCards;
-                        c = ((ClassicCard) src.top());
+                        c = (ClassicCard) src.top();
                     } else {
                         for (int i = 0; i < SOL_STACK_CNT && src == null; i++) {
                             if (!solStack[i].isEmpty() && solStack[i].contains(p)) {
                                 src = solStack[i];
-                                c = ((ClassicCard) src.getClickedCard(p));
+                                c = (ClassicCard) src.getClickedCard(p);
                             }
                         }
                         for (int i = 0; i < SEQ_STACK_CNT && src == null; i++) {
                             if (!seqStack[i].isEmpty() && seqStack[i].contains(p)) {
                                 src = seqStack[i];
-                                c = ((ClassicCard) src.top());
+                                c = (ClassicCard) src.top();
                             }
                         }
                     }
@@ -678,7 +678,6 @@ public class Solitaire extends Frame {
                     offscreenGr.setColor(Color.black);
                     offscreenGr.drawRect(loc.x, loc.y, ClassicCard.DEFAULT_WIDTH, ClassicCard.DEFAULT_HEIGHT);
                 } else {
-                    boolean xx = menuItemHint.getState();
                     deck.top().paint(offscreenGr, menuItemHint.getState());
                 }
 
@@ -702,22 +701,11 @@ public class Solitaire extends Frame {
 
             //Draw game info
             if (gameInfo != null && gameInfo.getType() != null && gameInfo.getSeed() != -1 && resBundle != null) {
-                String isRandomStr = null;
                 String levelStr = null;
-                String gameInfoStr = null;
+                String gameInfoStr;
                 if (GameInfo.RANDOM.equals(gameInfo.getType())) {
-                    isRandomStr = "Random ";
-                    if (Arrays.asList(easyGames).contains(gameInfo.getSeed()))
-                        levelStr = "Easy";
-                    else if (Arrays.asList(normalGames).contains(gameInfo.getSeed()))
-                        levelStr = "Normal";
-                    else if (Arrays.asList(hardGames).contains(gameInfo.getSeed()))
-                        levelStr = "Hard";
-                    else if (Arrays.asList(trickyGames).contains(gameInfo.getSeed()))
-                        levelStr = "Tricky";
                     gameInfoStr = MessageFormat.format(resBundle.getString("GameInfoRandom"), gameInfo.getSeed());
                 } else {
-                    isRandomStr = "";
                     if (gameInfo.getType().equals(GameInfo.WINNABLE_EASY))
                         levelStr = "Easy";
                     else if (gameInfo.getType().equals(GameInfo.WINNABLE_NORMAL))
@@ -726,8 +714,10 @@ public class Solitaire extends Frame {
                         levelStr = "Hard";
                     if (gameInfo.getType().equals(GameInfo.WINNABLE_TRICKY))
                         levelStr = "Tricky";
-                    gameInfoStr = MessageFormat.format(resBundle.getString("GameInfoWinnable"), resBundle.getString(
-                            "Level" + levelStr), gameInfo.getSeed());
+                    gameInfoStr = MessageFormat.format(
+                            resBundle.getString("GameInfoWinnable"),
+                            resBundle.getString("Level" + levelStr),
+                            gameInfo.getSeed());
                 }
                 Font gameInfoFont = new Font("Arial", Font.PLAIN, 14);
                 FontMetrics gameInfoFontMetrics = offscreenGr.getFontMetrics(gameInfoFont);
@@ -741,10 +731,6 @@ public class Solitaire extends Frame {
             }
 
             g.drawImage(offscreen, 0, 0, this);
-        }
-
-        public void destroy() {
-            offscreenGr.dispose();
         }
     }
 
