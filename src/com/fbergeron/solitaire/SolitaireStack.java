@@ -39,10 +39,10 @@ class SolitaireStack extends Stack {
      */
     private boolean isValid(ClassicCard c) {
         if (isEmpty())
-            return (c.getValue() == Value.V_KING);
+            return c.getValue() == Value.V_KING;
         else
-            return (c.getColor() != ((ClassicCard) top()).getColor() &&
-                    c.getValue().getValue() == ((ClassicCard) top()).getValue().getValue() - 1);
+            return c.getColor() != ((ClassicCard) top()).getColor() &&
+                    c.getValue().getValue() == ((ClassicCard) top()).getValue().getValue() - 1;
     }
 
     /**
@@ -52,7 +52,7 @@ class SolitaireStack extends Stack {
      * <CODE>false</CODE> otherwise.
      */
     public boolean isValid(Stack s) {
-        return (isValid(((ClassicCard) s.top())));
+        return isValid((ClassicCard) s.top());
     }
 }
 
