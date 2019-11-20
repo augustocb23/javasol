@@ -40,10 +40,10 @@ class SequentialStack extends Stack {
      */
     private boolean isValid(ClassicCard c) {
         if (isEmpty())
-            return (c.getValue() == Value.V_ACE);
+            return c.getValue() == Value.V_ACE;
         else
-            return (c.getSuit() == ((ClassicCard) top()).getSuit() &&
-                    c.getValue().getValue() == ((ClassicCard) top()).getValue().getValue() + 1);
+            return c.getSuit() == ((ClassicCard) top()).getSuit() &&
+                    c.getValue().getValue() == ((ClassicCard) top()).getValue().getValue() + 1;
     }
 
     /**
@@ -53,7 +53,7 @@ class SequentialStack extends Stack {
      * <CODE>false</CODE> otherwise.
      */
     public boolean isValid(Stack s) {
-        return (s.cardCount() == 1 && isValid(((ClassicCard) s.top())));
+        return s.cardCount() == 1 && isValid((ClassicCard) s.top());
     }
 }
 
