@@ -263,19 +263,24 @@ public class Solitaire extends Frame {
      */
     private void newGame() {
         // Get a random seed according to the game type
-        gameInfo.setSeed(-1);
-        Random aRandom = new Random();
-        if (gameInfo.getType().equals(GameInfo.WINNABLE_EASY))
-            gameInfo.setSeed(easyGames[aRandom.nextInt(easyGames.length)]);
-        if (gameInfo.getType().equals(GameInfo.WINNABLE_NORMAL))
-            gameInfo.setSeed(normalGames[aRandom.nextInt(normalGames.length)]);
-        if (gameInfo.getType().equals(GameInfo.WINNABLE_HARD))
-            gameInfo.setSeed(hardGames[aRandom.nextInt(hardGames.length)]);
-        if (gameInfo.getType().equals(GameInfo.WINNABLE_TRICKY))
-            gameInfo.setSeed(trickyGames[aRandom.nextInt(trickyGames.length)]);
+        Random random = new Random();
+        switch (gameInfo.getType()) {
+            case GameInfo.WINNABLE_EASY:
+                gameInfo.setSeed(easyGames[random.nextInt(easyGames.length)]);
+                break;
+            case GameInfo.WINNABLE_NORMAL:
+                gameInfo.setSeed(normalGames[random.nextInt(normalGames.length)]);
+                break;
+            case GameInfo.WINNABLE_HARD:
+                gameInfo.setSeed(hardGames[random.nextInt(hardGames.length)]);
+                break;
+            case GameInfo.WINNABLE_TRICKY:
+                gameInfo.setSeed(trickyGames[random.nextInt(trickyGames.length)]);
+                break;
+            default:
+                gameInfo.setSeed(random.nextInt(1000000));
+        }
 
-        if (gameInfo.getSeed() == -1)
-            gameInfo.setSeed(aRandom.nextInt(1000000));
         deck = new ClassicDeck(table);
         deck.shuffle(gameInfo.getSeed());
         deck.setLocation(DECK_POS.x, DECK_POS.y);

@@ -35,24 +35,24 @@ public abstract class Deck extends Stack {
      */
     public void shuffle(int seed) {
         //We transfer the deck in a vector temporarily
-        Vector v = new Vector();
+        Vector<Card> v = new Vector<>();
         while (!isEmpty())
             v.addElement(pop());
 
-        Random aRandom = new Random();
+        Random random = new Random();
 
         // set the seed to the chosen game type
         if (seed != -1)
-            aRandom.setSeed(seed);
+            random.setSeed(seed);
         else {
-            seed = aRandom.nextInt(1000000);
-            aRandom.setSeed(seed);
+            seed = random.nextInt(1000000);
+            random.setSeed(seed);
         }
 
         //We push randomly selected cards on the empty deck
         while (!v.isEmpty()) {
-            int randomCard = aRandom.nextInt(v.size());
-            Card c = (Card) v.elementAt(randomCard);
+            int randomCard = random.nextInt(v.size());
+            Card c = v.elementAt(randomCard);
             push(c);
             v.removeElement(c);
         }
