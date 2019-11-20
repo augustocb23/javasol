@@ -658,9 +658,9 @@ public class Solitaire extends Frame {
             }
 
             //Enable antialiasing
-            //offscreenGr.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-            //offscreenGr.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints
-            // .VALUE_TEXT_ANTIALIAS_ON );
+            offscreenGr.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            offscreenGr.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints
+                    .VALUE_TEXT_ANTIALIAS_ON);
 
             //Draw background
             offscreenGr.setColor(TABLE_COLOR);
