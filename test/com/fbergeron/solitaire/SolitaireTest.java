@@ -37,4 +37,16 @@ public class SolitaireTest {
         PA.invokeMethod(solitaire, "setGameType(java.lang.String)", GameInfo.WINNABLE_HARD);
         assertEquals(GameInfo.WINNABLE_HARD, ((GameInfo) PA.getValue(solitaire, "gameInfo")).getType());
     }
+
+    @Test
+    public void distributeCards() {
+        Solitaire solitaire = new Solitaire(false);
+        solitaire.setLocale(Locale.ENGLISH);
+
+        // certifica-se de que cada pilha tenha a quantidade correta de cartas
+        SolitaireStack[] solStacks = (SolitaireStack[]) PA.getValue(solitaire, "solStack");
+        for (int i = 0; i < Solitaire.SOL_STACK_CNT; i++) {
+            assertEquals(i + 1, solStacks[i].cardCount());
+        }
+    }
 }
