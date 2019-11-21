@@ -221,7 +221,8 @@ public class Solitaire extends Frame {
         table.addMouseListener(mouseManager);
         table.addMouseMotionListener(mouseManager);
 
-        setSize((ClassicCard.DEFAULT_WIDTH + 5) * SOL_STACK_CNT + 10 + getInsets().left + getInsets().right + 3, 560);
+        setSize((ClassicCard.DEFAULT_WIDTH + 5) * SOL_STACK_CNT +
+                10 + getInsets().left + getInsets().right + 3, 560);
 
         addWindowListener(
                 new SolitaireWindowManager(this,
@@ -376,7 +377,7 @@ public class Solitaire extends Frame {
 
     /**
      * Each time a new game begins, we have to distribute the
-     * cards in colums.  The number of columns is equal to SOL_STACK_CNT.
+     * cards in columns. The number of columns is equal to SOL_STACK_CNT.
      */
     private void distributeCards() {
         for (int i = 0; i < SOL_STACK_CNT; i++) {
